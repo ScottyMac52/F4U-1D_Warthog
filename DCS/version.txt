@@ -1,0 +1,48 @@
+http://blackveal.tplinkdns.com/MyWeb/TARGET/CTS/CTSversion.txt
+http://blackveal.tplinkdns.com/MyWeb/TARGET/CTS/CTSexe.zip
+2.620
+http://blackveal.tplinkdns.com/MyWeb/TARGET/CTS/CTSdb.zip
+2.710
+http://blackveal.tplinkdns.com/MyWeb/TARGET/CTS/CTSscript.zip
+2.712
+http://blackveal.tplinkdns.com/MyWeb/TARGET/CTS/CTSpdf.zip
+2.661
+http://blackveal.tplinkdns.com/MyWeb/TARGET/CTS/CTShtml.zip
+2.712
+http://blackveal.tplinkdns.com/MyWeb/TARGET/CTS/CTSjpeg_RH.zip
+2.710
+http://blackveal.tplinkdns.com/MyWeb/TARGET/CTS/CTSjpeg_BH.zip
+2.710
+http://blackveal.tplinkdns.com/MyWeb/TARGET/CTS/CTSjpeg_RJ.zip
+2.661
+http://blackveal.tplinkdns.com/MyWeb/TARGET/CTS/CTSjpeg_BJ.zip
+2.710
+http://blackveal.tplinkdns.com/MyWeb/TARGET/CTS/CTSjpeg_RP.zip
+2.450
+http://blackveal.tplinkdns.com/MyWeb/TARGET/CTS/CTSjpeg_BP.zip
+2.690
+http://blackveal.tplinkdns.com/MyWeb/TARGET/CTS/CTSjpeg_HV.zip
+2.710
+http://blackveal.tplinkdns.com/MyWeb/TARGET/CTS/CTSjpeg_FC3.zip
+2.640
+http://blackveal.tplinkdns.com/MyWeb/TARGET/CTS/CTSwav.zip
+2.690
+http://blackveal.tplinkdns.com/MyWeb/TARGET/CTS/CTSext.zip
+2.712
+-------
+Script Version 2.71b (Hotfix 2)
+for DCS World 2.8.8
+REQUIRES TARGET v3.0.21.910
+
+F-15E: Switching stations with H1L/R Long no longer actuates rudder trim.
+
+Known Issues:
+F-14: Starting the F-14 profile with the throttle pinky switch other than centered can cause applications launches and profile crashes.  Workaround: be sure the pinky switch is centered prior to loading the F-14.
+P-51D (Cougar): Toggling logical Gear State with S3+T6 Long will also toggle the manual radiator switch.  Simply press T6 or S3+T6 again to toggle back.
+
+Updated bindings since 2.71a: F-15E
+Updated bindings since 2.70: Mi-8, AH-64D
+Updated SnapViews since 2.70: none
+Updated Custom Luas since 2.70: AV-8B
+
+IMPORTANT: If you experienced an interrupted or corrupted install, please run this Updater again and select a Full reinstall.

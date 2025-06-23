@@ -1,0 +1,96 @@
+//-----------------------------------
+// Included Headers and Code files
+//-----------------------------------
+
+include "target.tmh"
+include "Common/util_usb.tmh"
+include "Common/MFD_Lights.tmc"
+include "Common/WH_Lights.tmc"
+include "DCS_UserSettings.ttm"
+include "DCS/DCS World.ttm"
+include "DCS/DCS_SelMod.tmc"
+include "DCS/DCS_Init.tmc"
+include "DCS/DCS_Global_Subs.tmc"
+include "DCS/CommState.tmc"
+include "DCS/CommState_WH.tmc"
+
+// Debug system
+int debugEnabled = 1;
+
+// State variables
+int gearDown = 1;
+int wingsLocked = 1;
+
+int main() {
+
+    if(Init(&EventHandle)) return 1;
+    
+	// Map S3 to DX30 
+	MapKey(&Joystick, S3, DX30);
+	MapKeyR(&Joystick, S3, 0);
+
+    // Axes
+    MapAxis(&Joystick, JOYX, DX_X_AXIS);
+    MapAxis(&Joystick, JOYY, DX_Y_AXIS);
+    MapAxis(&Throttle, THR_RIGHT, DX_Z_AXIS);
+    MapAxis(&Throttle, THR_FC, DX_SLIDER_AXIS);
+
+    // Flight Controls
+    MapKey(&Joystick, TG1,
+        EXEC("ActKey(PULSE+USB_L); if (debugEnabled) printf(\"[DEBUG] Ignition On\\xa\");"), // Magnetos ON
+        EXEC("ActKey(PULSE+USB_PERIOD); if (debugEnabled) printf(\"[DEBUG] Ignition Off\\xa\");") // Magnetos OFF
+    );
+
+    // Engine Controls
+    MapKey(&Throttle, APUON, EXEC("ActKey(PULSE+USB_PAGEUP); if (debugEnabled) printf(\"[DEBUG] Prop RPM Increase\\xa\");"));
+    MapKey(&Throttle, APUOFF, EXEC("ActKey(PULSE+USB_PAGEDOWN); if (debugEnabled) printf(\"[DEBUG] Prop RPM Decrease\\xa\");"));
+
+    // Flaps Control
+    MapKey(&Throttle, FLAPU, EXEC("ActKey(PULSE+L_SHIFT+USB_F); if (debugEnabled) printf(\"[DEBUG] Flaps Up\\xa\");"));
+    MapKey(&Throttle, FLAPD, EXEC("ActKey(PULSE+USB_LEFTCONTROL+USB_F); if (debugEnabled) printf(\"[DEBUG] Flaps Down\\xa\");"));
+
+	// Map CHF and CHB with TEMPO
+	MapKey(&Throttle, CHF, TEMPO(F4U_Mixture_Rich, F4U_Gear_Down, 300));
+	MapKey(&Throttle, CHB, TEMPO(F4U_Mixture_Lean, F4U_Gear_Up, 300));
+	
+	// Mapping in module init (e.g., DCS_Init.tmc or module-specific .tmc)
+	MapKey(&Throttle, FLAPU, F4U_Flaps_Up);   // Flap switch up = Flaps up (Ctrl+F)
+	MapKey(&Throttle, FLAPD, F4U_Flaps_Dn);   // Flap switch down = Flaps down (Shift+F)
+	
+    // Wings folding
+    MapKey(&Throttle, 20, EXEC(
+        "if (wingsLocked) { "
+        " ActKey(PULSE+USB_F); "
+        " wingsLocked = 0; "
+        " if (debugEnabled) printf(\"[DEBUG] Wings Unlocked\\xa\"); "
+        "} else { "
+        " ActKey(PULSE+USB_L); "
+        " wingsLocked = 1; "
+        " if (debugEnabled) printf(\"[DEBUG] Wings Locked\\xa\"); "
+        "}"
+    ));
+
+    // Weapons System
+    MapKey(&Throttle, EACON,
+        EXEC("ActKey(PULSE+USB_A); if (debugEnabled) printf(\"[DEBUG] Master Arm ON\\xa\");")
+    );
+    MapKey(&Throttle, EACOFF,
+        EXEC("ActKey(PULSE+USB_A); if (debugEnabled) printf(\"[DEBUG] Master Arm OFF\\xa\");")
+    );
+
+    // Airbrake (Landing Gear Fairings)
+    MapKey(&Throttle, BSF, EXEC(
+        "if (!gearDown) { "
+        " ActKey(PULSE+USB_B); "
+        " if (debugEnabled) printf(\"[DEBUG] Airbrake Deployed\\xa\"); "
+        "} else { "
+        " if (debugEnabled) printf(\"[DEBUG] Airbrake disabled: Gear down\\xa\"); "
+        "}"
+    ));
+
+    return 0;
+}
+
+int EventHandle(int type, alias o, int x) {
+    DefaultMapping(&o, x);
+}
